@@ -8,6 +8,15 @@ El proyecto está bien estructurado, separando claramente el backend (Java/Sprin
 
 El backend actual gestiona la autenticación, pero le falta la funcionalidad principal. Es necesario crear los `Controllers`, `Services` y `Repositories` para:
 
+### 0. Modelos y Entidades Base
+- **Crear entidades JPA faltantes**:
+  - `Doctor`: Información del médico (especialidad, horarios, etc.).
+  - `Cita`: Registro de citas agendadas.
+  - `Consulta`: Detalles de consultas realizadas.
+  - `Especialidad`: Catálogo de especialidades médicas.
+- **Definir relaciones entre entidades**: Usuario-Doctor, Doctor-Especialidad, Paciente-Cita, Doctor-Cita, Cita-Consulta.
+- **Crear DTOs**: Para transferencia de datos (DatosRegistroDoctor, DatosAgendarCita, DatosConsulta, etc.).
+
 ### 1. Gestión de Doctores
 - **`DoctorController`**:
   - `GET /api/doctores`: Listar todos los doctores.
@@ -26,6 +35,16 @@ El backend actual gestiona la autenticación, pero le falta la funcionalidad pri
   - `POST /api/consultas`: Permitir a un doctor crear un registro de la consulta (diagnóstico, etc.).
   - `GET /api/consultas/cita/{id}`: Permitir al paciente ver los detalles de una consulta pasada.
 
+### 4. Seguridad y Autorización
+- **Implementar autorización por roles**: Diferenciar permisos entre PACIENTE, MEDICO y ADMIN.
+- **Proteger endpoints**: Asegurar que solo usuarios autorizados accedan a ciertos recursos.
+- **Validación de datos**: Añadir validaciones en DTOs y controladores usando `@Valid` y anotaciones de validación.
+
+### 5. Funcionalidades de Negocio Adicionales
+- **Sistema de disponibilidad**: Permitir a los médicos configurar sus horarios disponibles.
+- **Gestión de especialidades**: CRUD para administrar el catálogo de especialidades médicas.
+- **Historial médico**: Endpoint para consultar el historial completo de un paciente.
+
 ## Frontend (`MedicAppFront`) - Tareas Críticas Faltantes
 
 Las vistas del frontend existen, pero necesitan ser conectadas a la lógica del backend.
@@ -41,9 +60,22 @@ Las vistas del frontend existen, pero necesitan ser conectadas a la lógica del 
 - **Dashboard del Paciente (`PacienteView.jsx`)**: Debe llamar a `GET /api/citas/paciente/{id}` para mostrar "Próximas Citas" y "Citas Pasadas".
 - **Dashboard del Médico (`MedicoView.jsx`)**: Debe llamar a `GET /api/citas/doctor/{id}` para mostrar su agenda.
 
-### 4. Feedback y Manejo de Estado
+### 4. Autenticación y Autorización
+- **Completar AuthProvider**: El sistema de autenticación actual está incompleto.
+- **Manejo de tokens JWT**: Almacenar y enviar tokens en las peticiones HTTP.
+- **Rutas protegidas**: Implementar protección de rutas según el rol del usuario.
+- **Logout funcional**: Implementar cierre de sesión completo con limpieza de estado.
+
+### 5. Navegación y UX
+- **Navbar dinámico**: Mostrar opciones diferentes según el rol del usuario logueado.
+- **Redirecciones post-login**: Dirigir a diferentes dashboards según el rol (paciente/médico/admin).
+- **Validación de formularios**: Añadir validaciones en registro, login y agendamiento.
+- **Manejo de errores**: Mostrar mensajes de error más específicos y user-friendly.
+
+### 6. Feedback y Manejo de Estado
 - Implementar indicadores de carga (`spinners`) durante las llamadas a la API.
 - Mostrar notificaciones de éxito ("Cita agendada") o error.
+- **Búsqueda y filtros**: Implementar búsqueda de doctores por nombre, especialidad, disponibilidad.
 
 ## Plan de Acción Sugerido
 
@@ -54,3 +86,15 @@ Abordar el desarrollo de manera incremental:
 3.  **Implementar Agendamiento**: Crear la funcionalidad de agendamiento de citas (`CitaController`) y conectarla desde el frontend.
 4.  **Desarrollar Dashboards**: Crear las vistas de paciente y médico para que puedan ver sus citas.
 5.  **Añadir Detalles de Consulta**: Finalmente, implementar la lógica para que los médicos puedan añadir detalles post-consulta.
+
+## Tareas Adicionales para Calidad y Robustez
+
+### Testing y Validación
+- **Tests de integración**: Para los nuevos controladores y servicios.
+- **Validación de datos**: Asegurar integridad de datos en todos los formularios.
+- **Manejo de excepciones**: Mejorar el manejo de errores en backend y frontend.
+
+### Funcionalidades Complementarias
+- **Sistema de notificaciones**: Implementar notificaciones básicas (email o en aplicación).
+- **Gestión de horarios**: Permitir a los médicos configurar y modificar su disponibilidad.
+- **Historial de consultas**: Vista completa del historial médico para pacientes y doctores.
