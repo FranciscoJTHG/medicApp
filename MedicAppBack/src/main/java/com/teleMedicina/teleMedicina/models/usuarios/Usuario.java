@@ -6,8 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.teleMedicina.teleMedicina.models.Rol;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -90,6 +88,11 @@ public class Usuario implements UserDetails {
     }
 
     public Usuario(DatosAutenticacionUsuario datosAutenticacionUsuario) {
+        this.email = datosAutenticacionUsuario.email();
+        this.clave = datosAutenticacionUsuario.clave();
+    }
+
+    public Usuario(DatosRegistroUsuario datosAutenticacionUsuario) {
         this.email = datosAutenticacionUsuario.email();
         this.clave = datosAutenticacionUsuario.clave();
         this.nombre = datosAutenticacionUsuario.nombre();

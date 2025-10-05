@@ -1,7 +1,5 @@
 package com.teleMedicina.teleMedicina.models.usuarios;
 
-import com.teleMedicina.teleMedicina.models.Rol;
-
 public record DatosRespuestaUsuario(
     String email,
     String nombre,

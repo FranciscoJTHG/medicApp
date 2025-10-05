@@ -1,4 +1,4 @@
-package com.teleMedicina.teleMedicina.models;
+package com.teleMedicina.teleMedicina.models.usuarios;
 
 public enum Rol {
     Paciente,

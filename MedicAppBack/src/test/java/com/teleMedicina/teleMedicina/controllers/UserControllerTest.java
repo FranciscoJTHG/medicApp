@@ -21,9 +21,9 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teleMedicina.teleMedicina.errores.ErrorResponse;
-import com.teleMedicina.teleMedicina.models.Rol;
 import com.teleMedicina.teleMedicina.models.usuarios.DatosAutenticacionUsuario;
 import com.teleMedicina.teleMedicina.models.usuarios.DatosRespuestaUsuario;
+import com.teleMedicina.teleMedicina.models.usuarios.Rol;
 import com.teleMedicina.teleMedicina.models.usuarios.Usuario;
 import com.teleMedicina.teleMedicina.models.usuarios.UsuarioRepository;
 import com.teleMedicina.teleMedicina.security.AutenticacionService;

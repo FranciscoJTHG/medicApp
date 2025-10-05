@@ -1,0 +1,24 @@
+# Etapa 1: Build con Node.js
+# Usamos la imagen LTS (Long-Term Support) de Node sobre Alpine para mayor estabilidad y seguridad.
+FROM node:lts-alpine AS builder
+# Establecemos el directorio de trabajo
+WORKDIR /app
+# Copiamos el package.json y package-lock.json para instalar dependencias
+COPY package*.json ./
+# Instalamos las dependencias del proyecto
+RUN npm install
+# Copiamos el resto de los archivos del frontend
+COPY . .
+# Construimos la aplicación para producción
+RUN npm run build
+# Etapa 2: Servir con Nginx
+# Usamos una imagen de Nginx muy ligera para servir el contenido estático
+FROM nginx:1.26-alpine
+# Copiamos los archivos construidos en la etapa anterior al directorio web de Nginx
+COPY --from=builder /app/dist /usr/share/nginx/html
+# Copiamos una configuración personalizada de Nginx para que funcione con React Router
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Exponemos el puerto 80, que es el puerto por defecto de Nginx
+EXPOSE 80
+# El comando por defecto de la imagen de Nginx ya inicia el servidor
+CMD ["nginx", "-g", "daemon off;"]

@@ -9,8 +9,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.teleMedicina.teleMedicina.models.Rol;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest

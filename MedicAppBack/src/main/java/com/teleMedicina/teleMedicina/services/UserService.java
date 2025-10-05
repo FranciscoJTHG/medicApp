@@ -1,6 +1,7 @@
 package com.teleMedicina.teleMedicina.services;
 
 import com.teleMedicina.teleMedicina.models.usuarios.DatosAutenticacionUsuario;
+import com.teleMedicina.teleMedicina.models.usuarios.DatosRegistroUsuario;
 import com.teleMedicina.teleMedicina.models.usuarios.DatosRespuestaUsuario;
 // import com.teleMedicina.teleMedicina.models.UserModel;
 import com.teleMedicina.teleMedicina.models.usuarios.Usuario;
@@ -25,24 +26,40 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public DatosRespuestaUsuario registerUser(DatosAutenticacionUsuario datosAutenticacionUsuario) {
+    public DatosRespuestaUsuario registerUser(DatosRegistroUsuario datosRegistroUsuario) {
 
-        Usuario usuario = new Usuario(datosAutenticacionUsuario);
-        usuario.setEmail(datosAutenticacionUsuario.email());
-        usuario.setNombre(datosAutenticacionUsuario.nombre());
-        usuario.setApellido(datosAutenticacionUsuario.apellido());
-        usuario.setClave(passwordEncoder.encode(datosAutenticacionUsuario.clave()));
-        usuario.setRol(datosAutenticacionUsuario.rol());
+        Usuario usuario = new Usuario(datosRegistroUsuario);
+        usuario.setEmail(datosRegistroUsuario.email());
+        usuario.setNombre(datosRegistroUsuario.nombre());
+        usuario.setApellido(datosRegistroUsuario.apellido());
+        usuario.setClave(passwordEncoder.encode(datosRegistroUsuario.clave()));
+        usuario.setRol(datosRegistroUsuario.rol());
 
         var usuarioRegistrado = userRepository.save(usuario);
 
-        return new DatosRespuestaUsuario(
-            usuarioRegistrado.getEmail(),
-            usuarioRegistrado.getNombre(),
-            usuarioRegistrado.getApellido(),
-            usuarioRegistrado.getRol()
-        );
+        return new DatosRespuestaUsuario(usuarioRegistrado);
+        //     usuarioRegistrado.getEmail(),
+        //     usuarioRegistrado.getNombre(),
+        //     usuarioRegistrado.getApellido(),
+        //     usuarioRegistrado.getRol()
+        // );
     }
+
+    // public DatosAutenticacionUsuario registerUser(DatosAutenticacionUsuario datosAutenticacionUsuario) {
+
+    //     Usuario usuario = new Usuario(datosAutenticacionUsuario);
+    //     usuario.setEmail(datosAutenticacionUsuario.email());
+    //     usuario.setClave(passwordEncoder.encode(datosAutenticacionUsuario.clave()));
+
+    //     var usuarioRegistrado = userRepository.save(usuario);
+
+    //     return new DatosRespuestaUsuario(
+    //         usuarioRegistrado.getEmail(),
+    //         usuarioRegistrado.getNombre(),
+    //         usuarioRegistrado.getApellido(),
+    //         usuarioRegistrado.getRol()
+    //     );
+    // }
 
 
 

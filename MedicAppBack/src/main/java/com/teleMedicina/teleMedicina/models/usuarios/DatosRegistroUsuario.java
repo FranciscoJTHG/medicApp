@@ -5,13 +5,20 @@ import jakarta.validation.constraints.NotBlank;
 
 // import com.teleMedicina.teleMedicina.models.Rol;
 
-public record DatosAutenticacionUsuario(
+public record DatosRegistroUsuario(
 
     @NotBlank
     @Email
     String email, 
 
     @NotBlank
-    String clave
+    String clave,
 
+    @NotBlank
+    String nombre,
+
+    @NotBlank
+    String apellido,
+
+    Rol rol
 ) {}

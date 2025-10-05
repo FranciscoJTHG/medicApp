@@ -1,0 +1,74 @@
+
+services:
+  # Servicio del Backend (API) con Hot-Reload
+  backend:
+    build:
+      context: ./MedicAppBack
+    ports:
+      - "8080:8080"
+    environment:
+      # Variables para la conexión a la base de datos MySQL
+      - SPRING_DATASOURCE_URL=jdbc:mysql://${DB_HOST}:3306/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD_USER}
+      # - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    volumes:
+      # Montamos el código fuente para hot-reloading con Spring Boot DevTools
+      - ./MedicAppBack/src:/app/src
+    depends_on:
+      db:
+        # Espera a que la base de datos no solo inicie, sino que esté saludable.
+        condition: service_healthy
+    logging:
+      driver: json-file
+    networks:
+      - medicapp-network
+
+  # Servicio del Frontend (React) con Hot-Reload
+  # frontend:
+  #   build:
+  #     context: ./MedicAppFront
+  #   ports:
+  #     # El servidor de desarrollo de Vite corre en el puerto 5173 por defecto
+  #     - "5173:5173"
+  #   volumes:
+  #     # Montamos el código fuente para que Vite detecte los cambios
+  #     - ./MedicAppFront:/app
+  #     # Truco para no sobreescribir el node_modules que se instala en el Dockerfile
+  #     - /app/node_modules
+  #   # Sobreescribimos el comando por defecto del Dockerfile para iniciar en modo desarrollo
+  #   command: npm run dev
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - medicapp-network
+
+  # Servicio de la Base de Datos (MySQL)
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_USER} # Contraseña para el usuario root de MySQL
+      MYSQL_DATABASE: ${DB_NAME}
+      # MYSQL_USER: root
+      # MYSQL_PASSWORD: admin
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - medicapp-network
+    # Healthcheck para asegurar que MySQL esté listo para aceptar conexiones.
+    healthcheck:
+      # El comando 'mysqladmin ping' verifica si el servidor MySQL está activo.
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-padmin"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+networks:
+  medicapp-network:
+    driver: bridge
+
+volumes:
+  db-data:

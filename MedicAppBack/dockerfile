@@ -1,0 +1,25 @@
+# Etapa 1: Construcción con Maven
+# Usamos una imagen de Eclipse Temurin con Maven, que es una opción moderna y segura.
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
+# Establecemos el directorio de trabajo dentro del contenedor
+WORKDIR /app
+# Copiamos solo el pom.xml para aprovechar el cache de Docker.
+# Si las dependencias no cambian, no se volverán a descargar.
+COPY pom.xml .
+RUN mvn dependency:go-offline
+# Copiamos el resto del código fuente
+COPY src ./src
+# Compilamos la aplicación y empaquetamos el .jar, saltando los tests
+#RUN mvn package -DskipTests
+RUN mvn package -Dmaven.test.skip=true
+# Etapa 2: Imagen final
+# Usamos una imagen Alpine con JRE 17 de Temurin, que es muy ligera y segura.
+FROM eclipse-temurin:17-jre-alpine
+# Establecemos el directorio de trabajo
+WORKDIR /app
+# Copiamos el .jar construido en la etapa anterior
+COPY --from=builder /app/target/teleMedicina-0.0.1-SNAPSHOT.jar app.jar
+# Exponemos el puerto 8080, que es el puerto por defecto de Spring Boot
+EXPOSE 8080
+# Comando para ejecutar la aplicación
+CMD ["java", "-jar", "app.jar"]

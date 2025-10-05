@@ -1,6 +1,6 @@
 package com.teleMedicina.teleMedicina.controllers;
 
-import com.teleMedicina.teleMedicina.models.usuarios.DatosAutenticacionUsuario;
+import com.teleMedicina.teleMedicina.models.usuarios.DatosRegistroUsuario;
 import com.teleMedicina.teleMedicina.models.usuarios.DatosRespuestaUsuario;
 // import com.teleMedicina.teleMedicina.models.UserModel;
 import com.teleMedicina.teleMedicina.models.usuarios.Usuario;
@@ -67,7 +67,7 @@ public class UserController {
 
     //Agregar usuario
     @PostMapping("/registro")
-    public ResponseEntity<DatosRespuestaUsuario> createUser(@Valid @RequestBody DatosAutenticacionUsuario datosAutenticacionUsuario) {
+    public ResponseEntity<DatosRespuestaUsuario> createUser(@Valid @RequestBody DatosRegistroUsuario datosAutenticacionUsuario) {
         var savedUser = userService.registerUser(datosAutenticacionUsuario);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
